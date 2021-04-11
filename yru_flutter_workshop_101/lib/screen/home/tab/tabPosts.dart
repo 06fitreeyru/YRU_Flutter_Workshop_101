@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:yru_flutter_workshop_101/api/apiService.dart';
 import 'package:yru_flutter_workshop_101/model/postsDao.dart';
-import 'package:yru_flutter_workshop_101/model/usersDao.dart';
+import 'package:yru_flutter_workshop_101/screen/home/showImagePage.dart';
 import '../../../configApp.dart';
 
 class TabPosts extends StatelessWidget {
@@ -44,7 +44,7 @@ class TabPosts extends StatelessWidget {
                         }
                         for (var i = 0; i < list.length; i++) {
                           postsList.add(new Posts(
-                              '${dao.data[i]..author.id}', '${dao.data[i].author.name}',
+                              '${dao.data[i].author.id}', '${dao.data[i].author.name}',
                               '${dao.data[i].author.email}',
                               '${dao.data[i].title}',
                               '${dao.data[i].description}',
@@ -98,6 +98,7 @@ class UsersItemState extends State<UsersItemList> {
       child: new ListTile(
         title: new Column(
           children: <Widget>[
+            // LogDebug('Touch List ${postsList.title.toString()}'),
             Text(postsList.title, style: TextStyle(
             fontWeight: FontWeight.bold, fontSize: 18.0,),
             textAlign: TextAlign.start),
@@ -106,29 +107,60 @@ class UsersItemState extends State<UsersItemList> {
             SizedBox(height: 10.0,),
             Row(
               children: [
-                Icon(Icons.linked_camera,color: Colors.blue),
-                SizedBox(width: 20.0,),
-                Icon(Icons.mode_comment_outlined,color: Colors.blue,),
-                SizedBox(width: 20.0,),
-                Icon(Icons.send_rounded,color: Colors.blue,),
+                IconButton(
+                  icon: const Icon(Icons.linked_camera,color: Colors.blue),
+                  onPressed: () {
+                    setState(() {
+                      LogDebug('icon 1 press:');
+                      onTapped(postsList,1);
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.mode_comment_outlined,color: Colors.blue),
+                  onPressed: () {
+                    setState(() {
+                      LogDebug('icon 2 press:');
+                      onTapped(postsList,2);
+                    });
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.send_rounded,color: Colors.blue),
+                  onPressed: () {
+                    setState(() {
+                      LogDebug('icon 3 press:');
+                      onTapped(postsList,3);
+                    });
+                  },
+                ),
+
               ],
             ),
             SizedBox(height: 10.0,)
           ],
         ),
         subtitle: Text(postsList.description),
-        onTap: (){
-          print('Touch List ${postsList.id.toString()}');
-        },
+        // onTap: (){
+        //   print('Touch List ${postsList.id.toString()}');
+        // },
+        onTap: () => onTapped(postsList,0),
       ),
     );
 
 
   }
 
-  void onTapped(Posts select) {
+  void onTapped(Posts select, int id) {
     // navigate to the next screen.
-    LogDebug('Edit name: ${select.name}');
+    LogDebug('name ${id.toString()}: ${select.name}');
+    LogDebug('title ${id.toString()}: ${select.title}');
+    LogDebug('img ${id.toString()}: ${select.img}');
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) =>
+        ShowImagePage(title: select.title,imgUrl:select.img)),).then((value)  {
+    });
+
   }
 }
 
